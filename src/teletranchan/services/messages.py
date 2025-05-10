@@ -1,6 +1,6 @@
 from telethon import events
 from src.teletranchan.config import INPUT_CHANNEL, OUTPUT_CHANNEL
-from src.teletranchan.clients. telegram_client
+from src.teletranchan.clients.telegram import telegram_client
 from src.teletranchan.utils import album_cache
 from src.teletranchan.services.translation import translate_text_with_openai
 import asyncio

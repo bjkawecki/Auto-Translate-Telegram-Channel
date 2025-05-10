@@ -1,5 +1,5 @@
 # Teletran-Chan
-<img src="etc/img/logo.png" width="300" height="300">
+![Logo](etc/img/logo.png)
 
 **Teletran-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
