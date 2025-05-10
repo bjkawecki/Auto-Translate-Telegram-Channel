@@ -1,0 +1,77 @@
+# Teletran-Chan
+<img src="etc/img/logo.png" width="300" height="300">
+
+**Teletran-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
+
+## How it works
+- The bot listens for incoming messages in a Telegram input channel.
+- It translates the text using OpenAI GPT and sends it along with any associated media to an output channel.
+- The bot can also process album messages that contain multiple parts of a single message.
+
+
+## Project structure
+
+```text
+.
+├── main.py
+├── src/
+│   └── teletranchan/
+│       ├── __init__.py       
+│       ├── config.py
+│       ├── clients/ 
+│       │   ├── openai.py
+│       │   └── telegram.py
+|       ├── services/
+│       │   ├── messages.py
+│       │   └── translation.py
+│       └── utils.py
+```
+
+## Requirements
+- Python 3.7 or higher
+- An OpenAI API key
+- A Telegram API token (for the bot)
+
+## Installation
+### 1. Create a virtual environment
+Create a virtual environment to isolate dependencies:
+```bash
+python -m venv venv
+```
+
+Activate the virtual environment:
+- Linux/macOS:
+```bash
+source venv/bin/activate
+```
+
+- Windows:
+```bash
+venv\Scripts\activate
+```
+### 2. Install dependencies
+Install all required dependencies defined in requirements.txt:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure environment variables
+Create a .env file in the root directory and add your API keys and tokens:
+
+```bash
+OPENAI_API_KEY=<your-openai-api-schlüssel>
+TELEGRAM_API_ID=<your-telegram-api-id>
+TELEGRAM_API_HASH=<your-telegram-api-hash>
+INPUT_CHANNEL=<your-input-channel-id>
+OUTPUT_CHANNEL=<your-output-channel-id>
+```
+
+### 4. Start the bot
+Start the bot with the following command:
+```bash
+python main.py
+```
+The bot will now begin listening for messages in the INPUT_CHANNEL and send them to the OUTPUT_CHANNEL after translation.
+
+## License
+This project is licensed under the MIT License.
