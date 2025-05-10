@@ -59,7 +59,7 @@ pip install -r requirements.txt
 Create a .env file in the root directory and add your API keys and tokens:
 
 ```bash
-OPENAI_API_KEY=<your-openai-api-schlüssel>
+OPENAI_API_KEY=<your-openai-api-key>
 TELEGRAM_API_ID=<your-telegram-api-id>
 TELEGRAM_API_HASH=<your-telegram-api-hash>
 INPUT_CHANNEL=<your-input-channel-id>
