@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
+import json
 
 load_dotenv()
 
@@ -38,6 +39,7 @@ def get_secret_openapikey():
     client = session.client(service_name="secretsmanager", region_name=region_name)
 
     try:
+        # Retrieve secrets from AWS Secrets Manager
         get_openapikey_value_response = client.get_secret_value(SecretId=openapikey)
         get_telegram_api_id_value_response = client.get_secret_value(
             SecretId=telegram_api_id
@@ -48,9 +50,19 @@ def get_secret_openapikey():
     except ClientError as e:
         raise e
 
-    OPENAI_API_KEY = get_openapikey_value_response["SecretString"]
-    API_ID = int(get_telegram_api_id_value_response["SecretString"])
-    API_HASH = get_telegram_api_hash_value_response["SecretString"]
+    # Parse the SecretString (which is a JSON string) into a dictionary
+    openai_secret = json.loads(get_openapikey_value_response["SecretString"])
+    telegram_api_id_secret = json.loads(
+        get_telegram_api_id_value_response["SecretString"]
+    )
+    telegram_api_hash_secret = json.loads(
+        get_telegram_api_hash_value_response["SecretString"]
+    )
+
+    # Extract the specific values from the parsed dictionaries
+    OPENAI_API_KEY = openai_secret["OPENAI_API_KEY"]
+    API_ID = int(telegram_api_id_secret["TELEGRAM_API_ID"])  # Convert to int
+    API_HASH = telegram_api_hash_secret["TELEGRAM_API_HASH"]
 
     return OPENAI_API_KEY, API_ID, API_HASH
 

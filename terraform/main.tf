@@ -303,8 +303,3 @@ resource "aws_lambda_function" "ttc_lambda_terminate_ec2" {
   source_code_hash = filebase64sha256("../lambda/terminateEC2Instance.py.zip")
 }
 
-
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  name              = "/aws/lambda/ttc_lambda_terminate_ec2"
-  retention_in_days = 7
-}
