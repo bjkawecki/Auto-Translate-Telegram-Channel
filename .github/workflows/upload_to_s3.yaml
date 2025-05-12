@@ -30,4 +30,4 @@ jobs:
       # 5. Lade die ZIP-Datei auf S3 hoch
       - name: Upload Code to S3
         run: |
-          aws s3 cp project.zip https://eu-central-1.console.aws.amazon.com/s3/buckets/telethon-ttc-deploy-bucket/project.zip
+          aws s3 cp project.zip s3://telethon-ttc-deploy-bucket/project.zip
