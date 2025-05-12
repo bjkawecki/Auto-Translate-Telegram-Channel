@@ -1,0 +1,39 @@
+name: Upload Code to S3 on Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout des Repositories
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # 2. Setup AWS CLI
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: europe-central-1
+
+      # 3. Installiere awscli und zip
+      - name: Install AWS CLI and zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli zip
+
+      # 4. Zippe den Code
+      - name: Zip Project
+        run: |
+          zip -r project.zip src main.py requirements.txt
+
+      # 5. Lade die ZIP-Datei auf S3 hoch
+      - name: Upload Code to S3
+        run: |
+          aws s3 cp project.zip https://eu-central-1.console.aws.amazon.com/s3/buckets/telethon-ttc-deploy-bucket/project.zip
