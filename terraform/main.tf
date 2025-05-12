@@ -47,7 +47,6 @@ resource "aws_route_table_association" "public_association" {
 }
 
 
-
 resource "aws_security_group" "ec2_sg" {
   vpc_id = aws_vpc.main.id
 
