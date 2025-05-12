@@ -22,7 +22,7 @@ async def main():
 
     try:
         # Starten und mit der Telefonnummer verbinden
-        await telegram_client.start(phone_number="", code_callback=get_code)
+        await telegram_client.start(phone="", code_callback=get_code)
         logger.info("🚀 Bot gestartet – Lausche auf neue Nachrichten...")
 
         # Sobald der Code verifiziert ist, läuft der Bot
