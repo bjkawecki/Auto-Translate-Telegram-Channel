@@ -51,10 +51,6 @@ resource "aws_route_table_association" "public_association" {
 resource "aws_security_group" "ec2_sg" {
   vpc_id = aws_vpc.main.id
 
-  # Keine Ingress-Regeln: keine externen Verbindungen erlaubt
-  # SSM funktioniert ohne expliziten Ingress!
-
-  # Ausgehender Verkehr (z. B. zu SSM, OpenAI, Telegram etc.)
   egress {
     from_port   = 0
     to_port     = 0
@@ -80,7 +76,7 @@ resource "aws_instance" "public" {
     Name = "ttc-public-instance"
   }
 
-  # Optional, falls du SSM nutzen willst
+  # für SSM
   iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
 }
 
@@ -112,5 +108,5 @@ resource "aws_iam_instance_profile" "ssm_profile" {
 
 resource "aws_key_pair" "dein_key" {
   key_name   = "my-key"
-  public_key = file("~/.ssh/id_ed25519.pub") # oder relativer Pfad
+  public_key = file("~/.ssh/id_ed25519.pub")
 }
