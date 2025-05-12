@@ -156,6 +156,22 @@ resource "aws_iam_policy" "s3_read_policy" {
   })
 }
 
+resource "aws_iam_policy" "secretsmanager_get_secret_policy" {
+  name        = "SecretsManagerGetSecretPolicy"
+  description = "Allow access to get secrets from Secrets Manager"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = "secretsmanager:GetSecretValue",
+      Resource = ["arn:aws:secretsmanager:eu-central-1:803871200093:secret:openapikey-*",
+        "arn:aws:secretsmanager:eu-central-1:803871200093:secret:telegram_api_id-*",
+      "arn:aws:secretsmanager:eu-central-1:803871200093:secret:telegram_api_hash-*"]
+    }]
+  })
+}
+
 
 
 # Policies an die Rolle anhängen
@@ -168,6 +184,11 @@ resource "aws_iam_role_policy_attachment" "ssm_attach" {
   role       = aws_iam_role.ttc_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 
+}
+
+resource "aws_iam_role_policy_attachment" "attach_secretsmanager_get_secret_policy" {
+  role       = aws_iam_role.ttc_ec2_role.name
+  policy_arn = aws_iam_policy.secretsmanager_get_secret_policy.arn
 }
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {

@@ -25,7 +25,7 @@ jobs:
       # 4. Zippe den Code
       - name: Zip Project
         run: |
-          zip -r project.zip src main.py requirements.txt
+          zip -r project.zip src main.py requirements.txt Dockerfile
 
       # 5. Lade die ZIP-Datei auf S3 hoch
       - name: Upload Code to S3

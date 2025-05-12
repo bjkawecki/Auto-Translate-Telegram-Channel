@@ -49,7 +49,7 @@ def get_secret_openapikey():
         raise e
 
     OPENAI_API_KEY = get_openapikey_value_response["SecretString"]
-    API_ID = get_telegram_api_id_value_response["SecretString"]
+    API_ID = int(get_telegram_api_id_value_response["SecretString"])
     API_HASH = get_telegram_api_hash_value_response["SecretString"]
 
     return OPENAI_API_KEY, API_ID, API_HASH

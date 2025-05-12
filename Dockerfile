@@ -6,7 +6,7 @@ WORKDIR /tmp/project
 # Kopiere main.py und requirements.txt in das Arbeitsverzeichnis
 COPY requirements.txt .
 COPY main.py .
-COPY src .
+COPY src src
 
 # Installiere Python-Abhängigkeiten
 RUN pip install --no-cache-dir -r requirements.txt
