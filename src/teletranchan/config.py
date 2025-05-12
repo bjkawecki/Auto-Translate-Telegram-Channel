@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+import boto3
+from botocore.exceptions import ClientError
 
 load_dotenv()
 
@@ -23,3 +25,34 @@ SYSTEM_PROMPT = "You are a professional translation assistant. \
 USER_PROMPT = "Translate the following HTML-formatted text into German: "
 
 LANGUAGE_MODEL = "gpt-4-turbo"
+
+
+def get_secret_openapikey():
+    openapikey = "openapikey"
+    telegram_api_id = "telegram_api_id"
+    telegram_api_hash = "telegram_api_hash"
+    region_name = "eu-central-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(service_name="secretsmanager", region_name=region_name)
+
+    try:
+        get_openapikey_value_response = client.get_secret_value(SecretId=openapikey)
+        get_telegram_api_id_value_response = client.get_secret_value(
+            SecretId=telegram_api_id
+        )
+        get_telegram_api_hash_value_response = client.get_secret_value(
+            SecretId=telegram_api_hash
+        )
+    except ClientError as e:
+        raise e
+
+    OPENAI_API_KEY = get_openapikey_value_response["SecretString"]
+    API_ID = get_telegram_api_id_value_response["SecretString"]
+    API_HASH = get_telegram_api_hash_value_response["SecretString"]
+
+    return OPENAI_API_KEY, API_ID, API_HASH
+
+
+OPENAI_API_KEY, API_ID, API_HASH = get_secret_openapikey()
