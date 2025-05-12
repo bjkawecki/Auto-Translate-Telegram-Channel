@@ -6,6 +6,8 @@ from src.teletranchan.services.translation import translate_text_with_openai
 import asyncio
 import logging
 
+album_cache_lock = asyncio.Lock()
+
 
 @telegram_client.on(events.NewMessage(chats=INPUT_CHANNEL))
 async def message_handler(event):
@@ -13,7 +15,8 @@ async def message_handler(event):
 
     # Album-Nachricht (Teil eines Albums)
     if message.grouped_id:
-        album_cache[message.grouped_id].append(message)
+        async with album_cache_lock:
+            album_cache[message.grouped_id].append(message)
 
         # Warten, ob noch weitere Teile kommen (kleine Verzögerung)
         await asyncio.sleep(1.5)
@@ -38,7 +41,7 @@ async def message_handler(event):
                 caption=translated_text[:1024],  # Telegram caption-Limit
                 parse_mode="html",
             )
-        return  # nicht weiter ausführen
+        return
 
     # Einzelne Nachricht
     html_text = message.text or ""
