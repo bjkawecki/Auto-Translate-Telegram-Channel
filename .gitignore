@@ -10,3 +10,4 @@ terraform.tfstate.backup
 .terraform/
 terraform.tfvars
 user_data.sh
+variables.tf
