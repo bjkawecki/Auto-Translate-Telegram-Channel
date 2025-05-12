@@ -1,5 +1,5 @@
 1. auf docker umgebung umstellen
-2. lambda trigger prüfen (funktioniert aktuell nicht)
+2. lambda trigger prüfen, EventBridge scheint zu klappen
 3. trigger soll nicht neue ec2 instanz auslösen, sondern neuen docker container build
 4. prüfen, ob auch dann sign in per telegram code nötig ist.
 5. autoscaling group löschen

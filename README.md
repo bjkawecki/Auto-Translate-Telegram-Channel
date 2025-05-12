@@ -28,7 +28,7 @@
 ```
 
 ## Requirements
-- Python 3.7 or higher
+- Python 3.13 or higher
 - An OpenAI API key
 - A Telegram API token (for the bot)
 
