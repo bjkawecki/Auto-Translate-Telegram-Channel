@@ -132,7 +132,6 @@ resource "aws_s3_bucket_public_access_block" "deploy_bucket_block" {
 }
 
 
-
 resource "aws_iam_role" "ec2_s3_read_role" {
   name = "ec2-s3-read-role"
 
