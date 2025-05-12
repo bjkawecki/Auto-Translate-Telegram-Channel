@@ -111,8 +111,6 @@ resource "aws_key_pair" "dein_key" {
 }
 
 
-
-
 resource "aws_s3_bucket" "deploy_bucket" {
   bucket = var.s3_bucket_name
 
