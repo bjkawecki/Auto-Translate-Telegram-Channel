@@ -110,3 +110,63 @@ resource "aws_key_pair" "dein_key" {
   key_name   = "my-key"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
+
+
+
+
+resource "aws_s3_bucket" "deploy_bucket" {
+  bucket = "telethon-ttc-deploy-bucket"
+
+  tags = {
+    Name        = "Telethon Deployment Bucket"
+    Environment = "prod"
+  }
+
+  force_destroy = false
+}
+
+resource "aws_s3_bucket_public_access_block" "deploy_bucket_block" {
+  bucket = aws_s3_bucket.deploy_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+
+
+resource "aws_iam_role" "ec2_s3_read_role" {
+  name = "ec2-s3-read-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_policy" "s3_read_policy" {
+  name = "s3-read-access"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "s3:GetObject"
+      ],
+      Resource = "arn:aws:s3:::mein-telethon-code-bucket/*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_s3_read" {
+  role       = aws_iam_role.ec2_s3_read_role.name
+  policy_arn = aws_iam_policy.s3_read_policy.arn
+}

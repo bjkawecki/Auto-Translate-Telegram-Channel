@@ -5,3 +5,9 @@ variable "region" {
 variable "amazon-linux-2-eu-central-1" {
   default = "ami-06d4d7b82ed5acff1"
 }
+
+
+variable "s3_bucket_name" {
+  description = "Der Name des S3-Buckets"
+  type        = string
+}
