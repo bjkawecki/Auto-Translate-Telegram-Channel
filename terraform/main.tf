@@ -115,7 +115,7 @@ resource "aws_key_pair" "dein_key" {
 
 
 resource "aws_s3_bucket" "deploy_bucket" {
-  bucket = "telethon-ttc-deploy-bucket"
+  bucket = var.s3_bucket_name
 
   tags = {
     Name        = "Telethon Deployment Bucket"

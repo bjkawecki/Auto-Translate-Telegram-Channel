@@ -8,6 +8,6 @@ variable "amazon-linux-2-eu-central-1" {
 
 
 variable "s3_bucket_name" {
-  description = "Der Name des S3-Buckets"
-  type        = string
+  default = "telethon-ttc-deploy-bucket"
+  type    = string
 }
