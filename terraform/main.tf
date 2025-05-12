@@ -68,7 +68,7 @@ resource "aws_instance" "public" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   user_data              = file("user_data.sh")
-  key_name               = aws_key_pair.dein_key.key_name
+  key_name               = aws_key_pair.my_key.key_name
 
 
   tags = {
@@ -77,6 +77,52 @@ resource "aws_instance" "public" {
 
   # für SSM
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
+}
+
+resource "aws_launch_template" "ttc_ec2_launch_template" {
+  name          = "ttc-ec2_launch_template"
+  image_id      = var.amazon-linux-2-eu-central-1
+  instance_type = "t3.micro"
+  key_name      = aws_key_pair.my_key.key_name
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_instance_profile.name
+  }
+  user_data = filebase64("user_data.sh")
+
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "ttc-public-instance"
+    }
+  }
+}
+
+resource "aws_autoscaling_group" "ttc_asg" {
+  name                      = "ttc-asg"
+  max_size                  = 1
+  min_size                  = 1
+  desired_capacity          = 1
+  vpc_zone_identifier       = [aws_subnet.public.id]
+  health_check_type         = "EC2"
+  health_check_grace_period = 300
+
+  launch_template {
+    id      = aws_launch_template.ttc_ec2_launch_template.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "ttc-public-instance"
+    propagate_at_launch = true
+  }
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 # IAM Rolle für EC2 erstellen
@@ -110,18 +156,7 @@ resource "aws_iam_policy" "s3_read_policy" {
   })
 }
 
-# AmazonSSMManagedInstanceCore-Policy für EC2-Rolle erstellen
-resource "aws_iam_policy" "ssm_policy" {
-  name = "ssm-policy"
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Effect   = "Allow",
-      Action   = "ssm:*",
-      Resource = "*"
-    }]
-  })
-}
+
 
 # Policies an die Rolle anhängen
 resource "aws_iam_role_policy_attachment" "s3_attach" {
@@ -131,7 +166,8 @@ resource "aws_iam_role_policy_attachment" "s3_attach" {
 
 resource "aws_iam_role_policy_attachment" "ssm_attach" {
   role       = aws_iam_role.ttc_ec2_role.name
-  policy_arn = aws_iam_policy.ssm_policy.arn
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+
 }
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
@@ -139,33 +175,8 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
   role = aws_iam_role.ttc_ec2_role.name
 }
 
-# resource "aws_iam_role" "ttc_ec2_role" {
-#   name = "ttc-ec2-role"
 
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect = "Allow",
-#       Principal = {
-#         Service = "ec2.amazonaws.com"
-#       },
-#       Action = "sts:AssumeRole"
-#     }]
-#   })
-# }
-
-# resource "aws_iam_role_policy_attachment" "ssm_attach" {
-#   role       = aws_iam_role.ttc_ec2_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-# }
-
-# resource "aws_iam_instance_profile" "ttc_ec2_role" {
-#   name = "ttc-ec2-role"
-#   role = aws_iam_role.ttc_ec2_role.name
-# }
-
-
-resource "aws_key_pair" "dein_key" {
+resource "aws_key_pair" "my_key" {
   key_name   = "my-key"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
@@ -191,40 +202,34 @@ resource "aws_s3_bucket_public_access_block" "deploy_bucket_block" {
   restrict_public_buckets = true
 }
 
-# resource "aws_iam_role" "ec2_s3_read_role" {
-#   name = "ec2-s3-read-role"
+resource "aws_cloudwatch_event_rule" "s3_put_post_rule" {
+  name        = "s3-put-post-rule"
+  description = "Trigger on S3 PUT/POST events"
+  event_pattern = jsonencode({
+    source      = ["aws.s3"],
+    detail_type = ["AWS API Call via CloudTrail"],
+    detail = {
+      eventSource = ["s3.amazonaws.com"],
+      eventName   = ["PutObject", "PostObject"],
+      requestParameters = {
+        bucketName = [var.s3_bucket_name]
+      }
+    }
+  })
+}
 
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect = "Allow",
-#       Principal = {
-#         Service = "ec2.amazonaws.com"
-#       },
-#       Action = "sts:AssumeRole"
-#     }]
-#   })
-# }
+resource "aws_cloudwatch_event_target" "lambda_target" {
+  rule      = aws_cloudwatch_event_rule.s3_put_post_rule.name
+  target_id = "lambda-target"
+  arn       = aws_lambda_function.ttc_lambda_terminate_ec2.arn
+}
 
-# resource "aws_iam_policy" "s3_read_policy" {
-#   name = "s3-read-access"
-
-#   policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect = "Allow",
-#       Action = [
-#         "s3:GetObject"
-#       ],
-#       Resource = "arn:aws:s3:::telethon-ttc-deploy-bucket/*"
-#     }]
-#   })
-# }
-
-# resource "aws_iam_role_policy_attachment" "attach_s3_read" {
-#   role       = aws_iam_role.ec2_s3_read_role.name
-#   policy_arn = aws_iam_policy.s3_read_policy.arn
-# }
+resource "aws_lambda_permission" "allow_eventbridge" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ttc_lambda_terminate_ec2.function_name
+  principal     = "events.amazonaws.com"
+  statement_id  = "AllowExecutionFromEventBridge"
+}
 
 
 resource "aws_iam_role" "lambda_terminate_ec2_role" {
