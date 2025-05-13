@@ -303,3 +303,94 @@ resource "aws_lambda_function" "ttc_lambda_terminate_ec2" {
   source_code_hash = filebase64sha256("../lambda/terminateEC2Instance.py.zip")
 }
 
+
+resource "aws_ssm_parameter" "openapi_key" {
+  name        = "/ttc-ec2/openapi-key"
+  description = "OpenAPI Key"
+  type        = "SecureString"
+  value       = var.openapi_key
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+
+resource "aws_ssm_parameter" "telegram_api_id" {
+  name        = "/ttc-ec2/telegram-api-id"
+  description = "Telegram API Id"
+  type        = "SecureString"
+  value       = var.telegram_api_id
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+
+resource "aws_ssm_parameter" "telegram_api_hash" {
+  name        = "/ttc-ec2/telegram-api-hash"
+  description = "Telegram API Hash"
+  type        = "SecureString"
+  value       = var.telegram_api_hash
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+
+resource "aws_ssm_parameter" "phone" {
+  name        = "/ttc-ec2/phone"
+  description = "Phone Number"
+  type        = "SecureString"
+  value       = var.phone
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+resource "aws_ssm_parameter" "telegram_password" {
+  name        = "/ttc-ec2/telegram-password"
+  description = "Telegram 2FA Password"
+  type        = "SecureString"
+  value       = var.telegram_password
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+resource "aws_ssm_parameter" "input_channel" {
+  name        = "/ttc-ec2/input-channel"
+  description = "Telegram Input Channel"
+  type        = "SecureString"
+  value       = var.input_channel
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+
+resource "aws_ssm_parameter" "output_channel" {
+  name        = "/ttc-ec2/output-channel"
+  description = "Telegram Output Channel"
+  type        = "SecureString"
+  value       = var.output_channel
+  overwrite   = true
+  tags = {
+    environment = "prod"
+  }
+}
+
+
+resource "aws_security_group_rule" "allow_http" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["${var.local_ip_adress}/32"]
+  security_group_id = aws_security_group.ec2_sg.id
+}

@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
-import json
 
 load_dotenv()
+
+region_name = "eu-central-1"
 
 
 INPUT_CHANNEL = os.getenv("INPUT_CHANNEL")
@@ -24,48 +25,86 @@ if mode == "dev":
 
 if DEV:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    API_ID = os.getenv("TELEGRAM_API_ID")
+    TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
     API_HASH = os.getenv("TELEGRAM_API_HASH")
     PHONE = os.getenv("PHONE")
     PASSWORD = os.getenv("PASSWORD")
 else:
 
-    def get_secret_openapikey():
-        openapikey = "openapikey"
-        telegram_api_id = "telegram_api_id"
-        telegram_api_hash = "telegram_api_hash"
-        region_name = "eu-central-1"
-
-        # Create a Secrets Manager client
-        session = boto3.session.Session()
-        client = session.client(service_name="secretsmanager", region_name=region_name)
-
+    def get_openapi_key(parameter_name, with_decryption=True):
         try:
-            # Retrieve secrets from AWS Secrets Manager
-            get_openapikey_value_response = client.get_secret_value(SecretId=openapikey)
-            get_telegram_api_id_value_response = client.get_secret_value(
-                SecretId=telegram_api_id
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
             )
-            get_telegram_api_hash_value_response = client.get_secret_value(
-                SecretId=telegram_api_hash
-            )
+            return response["Parameter"]["Value"]
         except ClientError as e:
             raise e
 
-        # Parse the SecretString (which is a JSON string) into a dictionary
-        openai_secret = json.loads(get_openapikey_value_response["SecretString"])
-        telegram_api_id_secret = json.loads(
-            get_telegram_api_id_value_response["SecretString"]
-        )
-        telegram_api_hash_secret = json.loads(
-            get_telegram_api_hash_value_response["SecretString"]
-        )
+    def get_telegram_api_id(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
 
-        # Extract the specific values from the parsed dictionaries
-        OPENAI_API_KEY = openai_secret["OPENAI_API_KEY"]
-        API_ID = int(telegram_api_id_secret["TELEGRAM_API_ID"])  # Convert to int
-        API_HASH = telegram_api_hash_secret["TELEGRAM_API_HASH"]
+    def get_telegram_api_hash(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
 
-        return OPENAI_API_KEY, API_ID, API_HASH
+    def get_phone_number(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
 
-    OPENAI_API_KEY, API_ID, API_HASH = get_secret_openapikey()
+    def get_telegram_2fa_password(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
+
+    def get_input_channel(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
+
+    def get_output_channel(parameter_name, with_decryption=True):
+        try:
+            ssm = boto3.client("ssm", region_name=region_name)
+            response = ssm.get_parameter(
+                Name=parameter_name, WithDecryption=with_decryption
+            )
+            return response["Parameter"]["Value"]
+        except ClientError as e:
+            raise e
+
+    OPENAI_API_KEY = get_openapi_key("/ttc-ec2/openapi-key")
+    TELEGRAM_API_ID = get_telegram_api_id("/ttc-ec2/telegram-api-id")
+    TELEGRAM_API_HASH = get_telegram_api_hash("/ttc-ec2/telegram-api-hash")
+    PHONE = get_phone_number("/ttc-ec2/phone")
+    TELEGRAM_2FA_PASSWORD = get_telegram_2fa_password("/ttc-ec2/telegram-password")
+    INPUT_CHANNEL = get_input_channel("/ttc-ec2/input-channel")
+    OUTPUT_CHANNEL = get_output_channel("/ttc-ec2/output-channel")
