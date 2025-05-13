@@ -298,6 +298,7 @@ resource "aws_lambda_function" "ttc_lambda_terminate_ec2" {
   handler          = "terminateEC2Instance.lambda_handler"
   filename         = "../lambda/terminateEC2Instance.py.zip"
   source_code_hash = filebase64sha256("../lambda/terminateEC2Instance.py.zip")
+  timeout          = 30
 }
 
 
