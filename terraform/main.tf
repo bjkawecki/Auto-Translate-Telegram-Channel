@@ -230,7 +230,6 @@ resource "aws_s3_bucket_notification" "bucket_notify" {
   lambda_function {
     lambda_function_arn = aws_lambda_function.ttc_lambda_terminate_ec2.arn
     events              = ["s3:ObjectCreated:*", "s3:ObjectRestore:Post"]
-    filter_prefix       = "project"
     filter_suffix       = ".zip"
   }
 
@@ -263,28 +262,32 @@ resource "aws_iam_role" "lambda_terminate_ec2_role" {
   })
 }
 
-resource "aws_iam_policy" "lambda_ec2_terminate_policy" {
+resource "aws_iam_role_policy" "lambda_terminate_ec2_policy" {
   name = "lambda-ec2-terminate-policy"
+  role = aws_iam_role.lambda_terminate_ec2_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [{
-      Effect = "Allow",
-      Action = [
-        "ec2:DescribeInstances",
-        "ec2:TerminateInstances",
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      Resource = "arn:aws:s3:::telethon-ttc-deploy-bucket/*"
-    }]
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ec2:DescribeInstances",
+          "ec2:TerminateInstances"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "*"
+      }
+    ]
   })
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
-  role       = aws_iam_role.lambda_terminate_ec2_role.name
-  policy_arn = aws_iam_policy.lambda_ec2_terminate_policy.arn
 }
 
 
@@ -385,6 +388,6 @@ resource "aws_security_group_rule" "allow_http" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = ["${var.local_ip_adress}/32"]
+  cidr_blocks       = ["${var.local_ip_address}/32"]
   security_group_id = aws_security_group.ec2_sg.id
 }
