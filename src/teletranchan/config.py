@@ -29,7 +29,7 @@ if DEV:
     TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
     API_HASH = os.getenv("TELEGRAM_API_HASH")
     PHONE = os.getenv("PHONE")
-    PASSWORD = os.getenv("PASSWORD")
+    TELEGRAM_2FA_PASSWORD = os.getenv("PASSWORD")
 else:
 
     def get_openapi_key(parameter_name, with_decryption=True):
