@@ -11,5 +11,7 @@ COPY src src
 # Installiere Python-Abhängigkeiten
 RUN pip install --no-cache-dir -r requirements.txt
 
+EXPOSE 5000
+
 # Starte das Skript beim Containerstart
 CMD ["python", "main.py"]

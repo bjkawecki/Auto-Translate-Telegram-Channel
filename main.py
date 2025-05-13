@@ -17,11 +17,11 @@ async def start_bot():
             password=TELEGRAM_2FA_PASSWORD,
         )
         if not telegram_client.is_connected():
-            print("Not connected. Start webserver...")
+            logger.info("Not connected. Start webserver...")
             task_quart = asyncio.create_task(run_quart())
             await asyncio.gather(task_quart)
 
-        print(telegram_client.is_connected())
+        logger.info(telegram_client.is_connected())
         if "task_quart" in locals():
             task_quart.cancel()
             try:

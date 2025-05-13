@@ -6,6 +6,8 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart, render_template, request
 
+from src.teletranchan.logger import logger
+
 app = Quart(__name__)
 code_from_user = None
 
@@ -15,7 +17,6 @@ code_event = Event()
 async def code_callback():
     while not code_event.is_set():
         await asyncio.sleep(0.5)
-    print()
     return code_from_user
 
 
@@ -29,7 +30,7 @@ async def submit_code():
     global code_from_user
     form = await request.form
     code_from_user = form["code"]
-    print("Empfangener Code:", code_from_user)
+    logger.info("Empfangener Code:", code_from_user)
     code_event.set()
     return "Code gespeichert"
 
@@ -45,6 +46,8 @@ async def run_quart():
     loop = asyncio.get_event_loop()
     loop.add_signal_handler(signal.SIGTERM, _signal_handler)
     config = Config()
+    config.bind = ["0.0.0.0:8000"]
+    logger.info("quart configured")
     loop.run_until_complete(
         await serve(app, config, shutdown_trigger=shutdown_event.wait)
     )
