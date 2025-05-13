@@ -1,41 +1,54 @@
-# main.py
-import logging
-from src.teletranchan.clients.telegram import telegram_client
-from src.teletranchan.services.messages import message_handler
+import asyncio
+import signal
+import sys
+import threading
+import time
+
 from telethon.errors import SessionPasswordNeededError
 
-# Logger einrichten
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+from src.teletranchan.clients.telegram import telegram_client
+from src.teletranchan.config import PASSWORD, PHONE
+from src.teletranchan.logger import logger
+from src.teletranchan.server import code_from_user, run_flask, code_callback
+from src.teletranchan.services.messages import message_handler
 
 
-# Callback-Funktion für den Bestätigungscode
-def get_code():
-    # Manuelle Eingabe des Codes (falls du ihn manuell eingeben willst)
-    return input("Bitte gib den Bestätigungscode ein: ")
+# async def code_callback():
+#     global code_from_user
+#     while code_from_user is None:
+#         await asyncio.sleep(1)
+#     print("Code empfangen:", code_from_user)
+#     return code_from_user
 
 
-async def main():
-    # TelegramClient erstellen
-
+async def start_bot():
     try:
-        # Starten und mit der Telefonnummer verbinden
-        await telegram_client.start(phone="", code_callback=get_code)
-        logger.info("🚀 Bot gestartet – Lausche auf neue Nachrichten...")
+        print("VERBUNDEN: ", telegram_client.is_connected())
+        await telegram_client.start(
+            phone=PHONE,
+            code_callback=code_callback,
+            password=PASSWORD,
+        )
+        print("VERBUNDEN: ", telegram_client.is_connected())
 
-        # Sobald der Code verifiziert ist, läuft der Bot
         await telegram_client.run_until_disconnected()
-
     except SessionPasswordNeededError:
-        # Wenn 2FA aktiviert ist, musst du das Passwort eingeben
         logger.error("❌ Zwei-Faktor-Authentifizierung erforderlich!")
     except Exception as e:
         logger.exception(f"❌ Unerwarteter Fehler beim Starten des Bots: {e}")
 
 
-if __name__ == "__main__":
-    import asyncio
+def stop_telegram_bot(signal, frame):
+    logger.info("Beende den Telegram-Bot...")
+    telegram_client.disconnect()  # Trennt die Verbindung zum Telegram-Server
+    sys.exit(0)  # Beendet das Programm
 
-    asyncio.run(main())
+
+if __name__ == "__main__":
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True  # Setzt den Thread als Daemon-Thread, damit er beendet wird, wenn das Hauptprogramm beendet wird.
+    flask_thread.start()
+    asyncio.run(start_bot())
+
+
+signal.signal(signal.SIGINT, stop_telegram_bot)  # Hört auf das CTRL+C Signal

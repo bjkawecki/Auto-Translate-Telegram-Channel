@@ -25,8 +25,7 @@ SYSTEM_PROMPT = "You are a professional translation assistant. \
                 Maintain all HTML tags and emojis exactly as in the original. \
                 A certain amount of stylistic freedom is allowed to improve clarity, tone, and flow in German. \
                 Do not add any comments, explanations, or formatting outside of the original text. \
-                Return only the translated HTML. \
-                Do not use cyrillic letters."
+                Return only the translated HTML."
 USER_PROMPT = "Translate the following HTML-formatted text into German: "
 
 
