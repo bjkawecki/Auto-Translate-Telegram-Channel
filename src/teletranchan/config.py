@@ -20,6 +20,7 @@ USER_PROMPT = "Translate the following HTML-formatted text into German: "
 LANGUAGE_MODEL = "gpt-4-turbo"
 
 mode = os.getenv("MODE", "prod")
+DEV = False
 if mode == "dev":
     DEV = True
 
