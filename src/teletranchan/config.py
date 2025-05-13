@@ -27,7 +27,7 @@ if mode == "dev":
 if DEV:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
-    API_HASH = os.getenv("TELEGRAM_API_HASH")
+    TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
     PHONE = os.getenv("PHONE")
     TELEGRAM_2FA_PASSWORD = os.getenv("PASSWORD")
 else:

@@ -21,7 +21,9 @@ async def start_bot():
             task_quart = asyncio.create_task(run_quart())
             await asyncio.gather(task_quart)
 
-        logger.info(telegram_client.is_connected())
+        logger.info(
+            f"Connection {'established.' if telegram_client.is_connected() else 'not established.'}"
+        )
         if "task_quart" in locals():
             task_quart.cancel()
             try:
