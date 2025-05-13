@@ -223,33 +223,27 @@ resource "aws_s3_bucket_public_access_block" "deploy_bucket_block" {
   restrict_public_buckets = true
 }
 
-resource "aws_cloudwatch_event_rule" "s3_put_post_rule" {
-  name        = "s3-put-post-rule"
-  description = "Trigger on S3 PUT/POST events"
-  event_pattern = jsonencode({
-    source      = ["aws.s3"],
-    detail_type = ["AWS API Call via CloudTrail"],
-    detail = {
-      eventSource = ["s3.amazonaws.com"],
-      eventName   = ["PutObject", "PostObject"],
-      requestParameters = {
-        bucketName = [var.s3_bucket_name]
-      }
-    }
-  })
+
+resource "aws_s3_bucket_notification" "bucket_notify" {
+  bucket = var.s3_bucket_name
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.ttc_lambda_terminate_ec2.arn
+    events              = ["s3:ObjectCreated:*", "s3:ObjectRestore:Post"]
+    filter_prefix       = "project"
+    filter_suffix       = ".zip"
+  }
+
+  depends_on = [aws_lambda_permission.allow_event_notification]
 }
 
-resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule      = aws_cloudwatch_event_rule.s3_put_post_rule.name
-  target_id = "lambda-target"
-  arn       = aws_lambda_function.ttc_lambda_terminate_ec2.arn
-}
-
-resource "aws_lambda_permission" "allow_eventbridge" {
+resource "aws_lambda_permission" "allow_event_notification" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.ttc_lambda_terminate_ec2.function_name
-  principal     = "events.amazonaws.com"
-  statement_id  = "AllowExecutionFromEventBridge"
+  principal     = "s3.amazonaws.com"
+  statement_id  = "AllowExecutionFromS3"
+  source_arn    = "arn:aws:s3:::${var.s3_bucket_name}"
+
 }
 
 
