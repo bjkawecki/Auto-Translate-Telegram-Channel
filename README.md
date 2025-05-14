@@ -1,7 +1,7 @@
-# Teletran-Chan
+# Mirrow-Chan
 ![Logo](etc/img/logo.png)
 
-**Teletran-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
+**Mirrow-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
 ## How it works
 - The bot listens for incoming messages in a Telegram input channel.
@@ -15,7 +15,7 @@
 .
 ├── main.py
 ├── src/
-│   └── teletranchan/
+│   └── mirrowchan/
 │       ├── __init__.py       
 │       ├── config.py
 │       ├── clients/ 

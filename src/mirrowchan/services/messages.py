@@ -1,8 +1,8 @@
 from telethon import events
-from src.teletranchan.config import INPUT_CHANNEL, OUTPUT_CHANNEL
-from src.teletranchan.clients.telegram import telegram_client
-from src.teletranchan.utils import album_cache
-from src.teletranchan.services.translation import translate_text_with_openai
+from src.mirrowchan.config import INPUT_CHANNEL, OUTPUT_CHANNEL
+from src.mirrowchan.clients.telegram import telegram_client
+from src.mirrowchan.utils import album_cache
+from src.mirrowchan.services.translation import translate_text_with_openai
 import asyncio
 import logging
 

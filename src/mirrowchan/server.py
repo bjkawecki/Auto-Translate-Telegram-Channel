@@ -6,7 +6,7 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart, render_template, request
 
-from src.teletranchan.logger import logger
+from src.mirrowchan.logger import logger
 
 app = Quart(__name__)
 code_from_user = None

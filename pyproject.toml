@@ -1,5 +1,5 @@
 [project]
-name = "teletranchan"
+name = "mirrowchan"
 version = "0.1.0"
 description = "Telegram-Kanal-Übersetzer mit OpenAI"
 authors = [{ name = "Dein Name", email = "dein@email.de" }]
@@ -8,7 +8,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 
 [tool.setuptools]
-packages = ["teletranchan"]
+packages = ["mirrowchan"]
 package-dir = { "" = "src" }
 
 [build-system]

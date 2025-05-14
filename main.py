@@ -2,11 +2,11 @@ import asyncio
 
 from telethon.errors import SessionPasswordNeededError
 
-from src.teletranchan.clients.telegram import telegram_client
-from src.teletranchan.config import TELEGRAM_2FA_PASSWORD, PHONE
-from src.teletranchan.logger import logger
-from src.teletranchan.server import code_callback, run_quart
-from src.teletranchan.services.messages import message_handler
+from src.mirrowchan.clients.telegram import telegram_client
+from src.mirrowchan.config import TELEGRAM_2FA_PASSWORD, PHONE
+from src.mirrowchan.logger import logger
+from src.mirrowchan.server import code_callback, run_quart
+from src.mirrowchan.services.messages import message_handler
 
 
 async def start_bot():
@@ -14,7 +14,7 @@ async def start_bot():
         await telegram_client.start(
             phone=PHONE,
             code_callback=code_callback,
-            password=TELEGRAM_2FA_PASSWORD,
+            # password=TELEGRAM_2FA_PASSWORD,
         )
         if not telegram_client.is_connected():
             logger.info("Not connected. Start webserver...")

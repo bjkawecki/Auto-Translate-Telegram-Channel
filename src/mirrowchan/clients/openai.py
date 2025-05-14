@@ -1,5 +1,5 @@
 from openai import AsyncOpenAI
-from src.teletranchan.config import OPENAI_API_KEY
+from src.mirrowchan.config import OPENAI_API_KEY
 
 
 if not OPENAI_API_KEY:
