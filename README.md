@@ -1,5 +1,5 @@
 # Echo-Chan
-![Logo](etc/img/logo.png)
+![Logo](assets/logo.png)
 
 **Echo-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
@@ -34,7 +34,7 @@
 
 ## AWS Setup Overview
 
-![aws-setup.svg](etc/img/aws-setup.svg)
+![aws-setup.svg](assets/aws-setup.svg)
 
 This setup uses one single Availability Zone, one public subnet, and one EC2 instance.
 
