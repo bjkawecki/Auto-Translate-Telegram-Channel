@@ -30,7 +30,8 @@
 ## Requirements
 - Python 3.13
 - An OpenAI API key
-- A Telegram API token (for the bot)
+- A Telegram API ID
+- A Telegram API Hash
 
 ## AWS Setup Overview
 
@@ -76,12 +77,12 @@ INPUT_CHANNEL=<your-input-channel-id>
 OUTPUT_CHANNEL=<your-output-channel-id>
 ```
 
-### 4. Start the bot
+### 4. Start the app
 Start the bot with the following command:
 ```bash
 python main.py
 ```
-The bot will now begin listening for messages in the INPUT_CHANNEL and send them to the OUTPUT_CHANNEL after translation.
+After login, the app will begin listening for messages in the INPUT_CHANNEL and send them to the OUTPUT_CHANNEL after translation.
 
 ## License
 This project is licensed under the MIT License.
