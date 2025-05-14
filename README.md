@@ -43,6 +43,9 @@ It's definitely not production-ready,there's no high availability, no horizontal
 
 However, the goal here was to keep things simple and easy to follow for training and learning purposes.
 
+![aws-setup.svg](assets/ec2-setup.png)
+The Flask server is secured as well as possible for now, though improvements are still possible. It runs on an open HTTP port 80 (not secure!), but access is restricted to the committing admin’s IP address, which is provided as a variable during `terraform apply`.
+
 ## Installation
 ### 1. Create a virtual environment
 Create a virtual environment to isolate dependencies:
