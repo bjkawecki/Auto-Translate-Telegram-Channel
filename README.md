@@ -1,4 +1,4 @@
-# Mirrow-Chan
+<# Mirrow-Chan
 ![Logo](etc/img/logo.png)
 
 **Mirrow-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
@@ -31,6 +31,16 @@
 - Python 3.13
 - An OpenAI API key
 - A Telegram API token (for the bot)
+
+## AWS Setup Overview
+
+![aws-setup.svg](etc/img/aws-setup.svg)
+
+This setup uses one single Availability Zone, one public subnet, and one EC2 instance.
+
+It's definitely not production-ready,there's no high availability, no horizontal scaling, and everything sits in a public subnet.
+
+However, the goal here was to keep things simple and easy to follow for training and learning purposes.
 
 ## Installation
 ### 1. Create a virtual environment
