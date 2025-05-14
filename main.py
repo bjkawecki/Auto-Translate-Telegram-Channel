@@ -14,7 +14,6 @@ async def start_bot():
         if not telegram_client.is_connected():
             logger.info("Not connected. Start webserver...")
             task_quart = asyncio.create_task(run_quart())
-            await asyncio.gather(task_quart)
 
         await telegram_client.start(
             phone=PHONE,
