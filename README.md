@@ -1,12 +1,12 @@
 # Echo-Chan
 ![Logo](assets/logo.png)
 
-**Echo-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
+**Echo-Chan** is a Telegram app that receives messages from an input channel, translates them, and forwards them to an output channel. The app uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
 ## How it works
-- The bot listens for incoming messages in a Telegram input channel.
+- The app listens for incoming messages in a Telegram input channel.
 - It translates the text using OpenAI GPT and sends it along with any associated media to an output channel.
-- The bot can also process album messages that contain multiple parts of a single message.
+- The app can also process album messages that contain multiple parts of a single message.
 
 
 ## Project structure
@@ -78,7 +78,7 @@ OUTPUT_CHANNEL=<your-output-channel-id>
 ```
 
 ### 4. Start the app
-Start the bot with the following command:
+Start the app with the following command:
 ```bash
 python main.py
 ```
