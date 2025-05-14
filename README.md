@@ -45,9 +45,10 @@ However, the goal here was to keep things simple and easy to follow for training
 
 ## EC2 Setup Overview
 ![aws-setup.svg](assets/ec2-setup.png)
+
 The Flask server is secured as well as possible for now, though improvements are still possible. It runs on an open HTTP port 80 (not secure!), but access is restricted to the committing admin’s IP address, which is provided as a variable during `terraform apply`.
 
-Once the user logs in to the EC2 instance, the Flask server gracefully shuts down to free up resources. From that point onward, the Telethon event loop takes over and continuously handles incoming requests and events, managing the interaction with the Telegram channels.
+Once the user logs in to the EC2 instance, the Flask server shuts down. The Telethon event loop takes over and continuously handles incoming requests and events, managing the interaction with the Telegram channels.
 
 ## Installation
 ### 1. Create a virtual environment
