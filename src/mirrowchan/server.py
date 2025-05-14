@@ -16,24 +16,8 @@ code_event = Event()
 
 
 async def code_callback():
-    if not telegram_client.is_connected():
-        logger.info("Not connected. Start webserver...")
-        task_quart = asyncio.create_task(run_quart())
-        await asyncio.gather(task_quart)
-        logger.info(
-            f"Connection {'established.' if telegram_client.is_connected() else 'not established.'}"
-        )
-
     while not code_event.is_set():
         await asyncio.sleep(1)
-
-    # if task_quart:
-    #     task_quart.cancel()
-    #     try:
-    #         await task_quart  # Warten, bis der Task tatsächlich abgebrochen wird
-    #     except asyncio.CancelledError:
-    #         logger.info("Quart-Server wurde gestoppt.")
-
     return code_from_user
 
 
