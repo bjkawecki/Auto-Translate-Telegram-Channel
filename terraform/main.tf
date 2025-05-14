@@ -69,7 +69,6 @@ resource "aws_instance" "public" {
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   user_data              = file("user_data.sh")
   key_name               = aws_key_pair.my_key.key_name
-  count                  = 1
 
 
   tags = {
