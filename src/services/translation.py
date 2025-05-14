@@ -1,5 +1,5 @@
-from src.mirrowchan.config import LANGUAGE_MODEL, SYSTEM_PROMPT, USER_PROMPT
-from src.mirrowchan.clients.openai import openai_client
+from src.config import LANGUAGE_MODEL, SYSTEM_PROMPT, USER_PROMPT
+from src.clients.openai import openai_client
 
 
 async def translate_text_with_openai(html_text: str) -> str:

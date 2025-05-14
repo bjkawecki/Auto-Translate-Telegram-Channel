@@ -5,9 +5,9 @@ from threading import Event
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart, render_template, request
-from src.mirrowchan.clients.telegram import telegram_client
+from src.clients.telegram import telegram_client
 
-from src.mirrowchan.logger import logger
+from src.logger import logger
 
 app = Quart(__name__)
 code_from_user = None

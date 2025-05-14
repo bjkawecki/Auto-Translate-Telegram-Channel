@@ -2,11 +2,11 @@ import asyncio
 
 from telethon.errors import SessionPasswordNeededError
 
-from src.mirrowchan.clients.telegram import telegram_client
-from src.mirrowchan.config import TELEGRAM_2FA_PASSWORD, PHONE, OUTPUT_CHANNEL
-from src.mirrowchan.logger import logger
-from src.mirrowchan.server import code_callback, run_quart
-from src.mirrowchan.services.messages import message_handler
+from src.clients.telegram import telegram_client
+from src.config import TELEGRAM_2FA_PASSWORD, PHONE, OUTPUT_CHANNEL
+from src.logger import logger
+from src.server import code_callback, run_quart
+from src.services.messages import message_handler
 
 
 async def start_bot():

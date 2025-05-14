@@ -1,7 +1,7 @@
-<# Mirrow-Chan
+# Echo-Chan
 ![Logo](etc/img/logo.png)
 
-**Mirrow-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
+**Echo-Chan** is a Telegram bot that receives messages from an input channel, translates them, and forwards them to an output channel. The bot uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
 ## How it works
 - The bot listens for incoming messages in a Telegram input channel.
@@ -14,17 +14,17 @@
 ```text
 .
 ├── main.py
-├── src/
-│   └── mirrowchan/
-│       ├── __init__.py       
-│       ├── config.py
-│       ├── clients/ 
-│       │   ├── openai.py
-│       │   └── telegram.py
-|       ├── services/
-│       │   ├── messages.py
-│       │   └── translation.py
-│       └── utils.py
+├── src/      
+│    ├── config.py
+│    ├── clients/ 
+│    │   ├── openai.py
+│    │   └── telegram.py
+│    ├── services/
+│    │   ├── messages.py
+│    │   └── translation.py
+│    ├── templates/
+│    │   └── index.html
+│    └── utils.py
 ```
 
 ## Requirements
