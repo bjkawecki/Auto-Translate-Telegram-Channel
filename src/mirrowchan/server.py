@@ -31,7 +31,7 @@ async def submit_code():
     global code_from_user
     form = await request.form
     code_from_user = form["code"]
-    logger.info("Empfangener Code:", code_from_user)
+    logger.info(f"Empfangener Code: {code_from_user}")
     code_event.set()
     return "Code gespeichert"
 

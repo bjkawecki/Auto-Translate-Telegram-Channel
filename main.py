@@ -3,7 +3,7 @@ import asyncio
 from telethon.errors import SessionPasswordNeededError
 
 from src.mirrowchan.clients.telegram import telegram_client
-from src.mirrowchan.config import TELEGRAM_2FA_PASSWORD, PHONE
+from src.mirrowchan.config import TELEGRAM_2FA_PASSWORD, PHONE, OUTPUT_CHANNEL
 from src.mirrowchan.logger import logger
 from src.mirrowchan.server import code_callback, run_quart
 from src.mirrowchan.services.messages import message_handler
@@ -23,6 +23,9 @@ async def start_bot():
         )
         logger.info(
             f"Connection {'established.' if telegram_client.is_connected() else 'not established.'}"
+        )
+        await telegram_client.send_message(
+            OUTPUT_CHANNEL, "✅ Testnachricht von Telethon!"
         )
         if "task_quart" in locals():
             task_quart.cancel()
