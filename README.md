@@ -93,6 +93,16 @@ Once the user successfully logs in via the Telegram API, the Flask server shuts 
     - `main.py` is executed
 
 
+## Automation – with a Manual Checkpoint
+
+The deployment process is fully automated up to the point where the application requires Telegram authentication.
+
+Since Telegram sends a login code to an existing device, this step must be done manually.
+
+To simplify that, a temporary Flask web server runs on the EC2 instance, allowing the user to enter the code. Once submitted, the server shuts down automatically.
+
+> **Not secure for production – no authentication on the Flask form.**
+
 ## Local Installation
 ### 1. Create a virtual environment
 Create a virtual environment to isolate dependencies:
