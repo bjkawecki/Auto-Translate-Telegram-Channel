@@ -28,7 +28,7 @@ async def message_handler(event):
             # Optional: kombinierten Text aus allen Nachrichten
             full_text = "\n\n".join(m.text or "" for m in messages if m.text)
             try:
-                translated_text = await translate_text_with_openai(full_text) | ""
+                translated_text = await translate_text_with_openai(full_text) or ""
             except Exception as e:
                 translated_text = "⚠️ Übersetzungsfehler"
                 logger = logging.getLogger(__name__)
