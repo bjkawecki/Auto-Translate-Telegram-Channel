@@ -1,3 +1,13 @@
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/Amazon_Web_Services-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)
+![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![Telethon](https://img.shields.io/badge/Telethon-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+![ChatGPT](https://img.shields.io/badge/OpenApi-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Github-Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+
+
+
 # Echo-Chan
 ![Logo](assets/logo.png)
 
@@ -41,7 +51,7 @@ This setup uses one single Availability Zone, one public subnet, and one EC2 ins
 
 It's definitely not production-ready,there's no high availability, no horizontal scaling, and everything sits in a public subnet.
 
-However, the goal here was to keep things simple and easy to follow for training and learning purposes.
+However, the goal here was to keep things simple and easy to follow for training and learning purposes, especially Terraform.
 
 ## EC2 Setup Overview
 ![aws-setup.svg](assets/ec2-setup.png)
