@@ -4,7 +4,6 @@ import boto3
 def lambda_handler(event, context):
     ec2 = boto3.client("ec2")
 
-    # Der Tag-Name, nach dem wir suchen (in deinem Fall "ttc-public-instance")
     instance_name_tag = "ttc-public-instance"
 
     # Beschreibe alle Instanzen, um die mit dem Tag "Name" = "ttc-public-instance" übereinstimmende Instanz zu finden
@@ -23,8 +22,6 @@ def lambda_handler(event, context):
         for instance in reservation["Instances"]:
             instance_id = instance["InstanceId"]
             print(f"Found instance with ID: {instance_id}")
-
-            # Terminieren der Instanz
             try:
                 ec2.terminate_instances(InstanceIds=[instance_id])
                 terminated_instances.append(instance_id)
