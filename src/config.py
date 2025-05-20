@@ -32,7 +32,7 @@ if DEV:
     TELEGRAM_2FA_PASSWORD = os.getenv("PASSWORD")
 else:
 
-    def get_openapi_key(parameter_name, with_decryption=True):
+    def get_openai_key(parameter_name, with_decryption=True):
         try:
             ssm = boto3.client("ssm", region_name=region_name)
             response = ssm.get_parameter(
@@ -102,7 +102,7 @@ else:
         except ClientError as e:
             raise e
 
-    OPENAI_API_KEY = get_openapi_key("/ttc-ec2/openapi-key")
+    OPENAI_API_KEY = get_openai_key("/ttc-ec2/openapi-key")
     TELEGRAM_API_ID = get_telegram_api_id("/ttc-ec2/telegram-api-id")
     TELEGRAM_API_HASH = get_telegram_api_hash("/ttc-ec2/telegram-api-hash")
     PHONE = get_phone_number("/ttc-ec2/phone")
