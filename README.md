@@ -1,4 +1,4 @@
-# Teletran-Chan
+# Telegram GPT Translator App
 
 ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=flat-square&logo=terraform&logoColor=white)
 ![AWS](https://img.shields.io/badge/Amazon_Web_Services-FF9900?style=flat-square&logo=amazonwebservices&logoColor=white)
@@ -9,12 +9,9 @@
 ![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Github-Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
 
+I developed a Telegram API based app that receives messages from an input channel, translates them, and forwards them to an output channel. The app uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
 
-![Logo](assets/logo.png)
-
-**Teletran-Chan** is a Telegram app that receives messages from an input channel, translates them, and forwards them to an output channel. The app uses OpenAI GPT to translate the messages and utilizes the Telegram API for communication.
-
-## Table of Contents    
+## Table of Contents
 
 1. **[How it works](#how-it-works)**
 2. **[Project structure](#usage)**
@@ -26,19 +23,19 @@
 8. **[License](#license)**
 
 ## How it works
+
 - The app listens for incoming messages in a Telegram input channel.
 - It translates the text using OpenAI GPT and sends it along with any associated media to an output channel.
 - The app can also process album messages that contain multiple parts of a single message.
-
 
 ## Project structure
 
 ```text
 .
 ├── main.py
-├── src/      
+├── src/
 │    ├── config.py
-│    ├── clients/ 
+│    ├── clients/
 │    │   ├── openai.py
 │    │   └── telegram.py
 │    ├── services/
@@ -50,6 +47,7 @@
 ```
 
 ## Requirements
+
 - Python 3.13
 - An OpenAI API key
 - A Telegram API ID
@@ -66,6 +64,7 @@ It's definitely not production-ready,there's no high availability, no horizontal
 However, the goal here was to keep things simple and easy to follow for training and learning purposes, especially Terraform.
 
 ## EC2 Setup Overview
+
 ![aws-setup.svg](assets/ec2-setup.png)
 
 The Flask server is secured as well as possible for now. It runs on an open HTTP port 80 (not secure!), but access is restricted to the committing admin’s IP address, which is provided as a variable during `terraform apply`.
@@ -85,14 +84,14 @@ Once the user successfully logs in via the Telegram API, the Flask server shuts 
 5. The Auto Scaling Group launches a new EC2 instance automatically.
 
 6. During instance launch, the `user-data` script:
-    - Downloads the source code from the S3 bucket
-    - Builds a new Docker image
-    - Starts the container
+
+   - Downloads the source code from the S3 bucket
+   - Builds a new Docker image
+   - Starts the container
 
 7. Inside the container:
-    - Dependencies are installed
-    - `main.py` is executed
-
+   - Dependencies are installed
+   - `main.py` is executed
 
 ## Automation – with a Manual Checkpoint
 
@@ -105,29 +104,39 @@ To simplify that, a temporary Flask web server runs on the EC2 instance, allowin
 > **Not secure for production – no authentication on the Flask form.**
 
 ## Local Installation
+
 ### 1. Create a virtual environment
+
 Create a virtual environment to isolate dependencies:
+
 ```bash
 python -m venv venv
 ```
 
 Activate the virtual environment:
+
 - Linux/macOS:
+
 ```bash
 source venv/bin/activate
 ```
 
 - Windows:
+
 ```bash
 venv\Scripts\activate
 ```
+
 ### 2. Install dependencies
+
 Install all required dependencies defined in requirements.txt:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Configure environment variables
+
 Create a .env file in the root directory and add your API keys and tokens:
 
 ```bash
@@ -139,11 +148,15 @@ OUTPUT_CHANNEL=<your-output-channel-id>
 ```
 
 ### 4. Start the app
+
 Start the app with the following command:
+
 ```bash
 python main.py
 ```
+
 After login, the app will begin listening for messages in the INPUT_CHANNEL and send them to the OUTPUT_CHANNEL after translation.
 
 ## License
+
 This project is licensed under the MIT License.
